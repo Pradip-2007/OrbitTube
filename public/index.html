@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+    <title>OrbitTube</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="logo">Orbit<span>Tube</span></div>
+        <p class="tagline">Watch YouTube videos in sync with friends</p>
+        <input type="text" id="hostUsernameInput" placeholder="Your name" maxlength="20" required
+            style="width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff;">
+        <button class="create-btn" onclick="createRoom()">
+            Create New Room
+        </button>
+
+        <div class="divider">
+            <span>or join existing</span>
+        </div>
+
+        <form id="joinForm">
+            <input type="text" id="roomId" placeholder="Enter Room ID" required />
+            <input type="text" id="usernameInput" placeholder="Your name" maxlength="20" required>
+
+            <button type="submit" class="join-btn">
+                Join Room
+            </button>
+        </form>
+
+    </div>
+
+    <script>
+        async function createRoom() {
+            const username = hostUsernameInput.value.trim();
+            if (!username) {
+                alert("Please enter Your name ");
+                return;
+            }
+            localStorage.setItem("username", username);
+            window.location.href = '/create-room'
+        }
+        document.getElementById('joinForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            const roomid = document.getElementById('roomId').value.trim()
+            if (!username || !roomid) {
+                alert("Please enter roomid and your name");
+            }
+            localStorage.setItem("username", username);
+            if (roomid) {
+                window.location.href = `/room/${roomid}`
+            }
+        })
+        const pending_room = localStorage.getItem("pendingroom");
+        if (pending_room) {
+            document.getElementById("roomId").value = pending_room;
+            localStorage.removeItem("pendingroom");
+        }
+    </script>
+
+</body>
+
+</html>

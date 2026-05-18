@@ -1,0 +1,295 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0f0f0f;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+}
+
+.room-container {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+}
+
+.main-area {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.chat-section {
+    flex-direction: column;
+    display: flex;
+    overflow: hidden;
+    width: 350px;
+    flex-shrink: 0;
+
+}
+
+.chat-messages div {
+    margin: 4px;
+}
+
+.chat-messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 10px;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.video-section {
+    flex: 1;
+
+}
+
+.video-section iframe {
+    height: 100%;
+    width: 100%;
+}
+
+#RoomId {
+    background: #2a2a2a;
+    margin: 35px;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    color: #888;
+}
+
+.room-header {
+    height: 56px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 0px 16px;
+}
+
+#participantCount {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.room-badge {
+    flex-shrink: 0;
+}
+
+.header-left {
+    align-items: center;
+    color: white;
+    display: flex;
+    gap: 12px;
+}
+
+.header-right {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+
+    color: wheat;
+    justify-content: space-between;
+}
+
+.chat-header {
+    flex-shrink: 0;
+}
+
+.video-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    gap: 8px;
+
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+    word-break: break-word;
+    padding: 6px 10px;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.my-message {
+    align-self: flex-end;
+    background: #005c4b;
+}
+
+.other-message {
+    align-self: flex-start;
+    background: #2a2a2a;
+}
+
+.msg-username {
+    font-size: 12px;
+    font-weight: 600;
+    color: #a8d8a8;
+}
+
+.msg-time {
+    font-size: 12px;
+    color: #aaa;
+    align-self: flex-end;
+    margin-top: 2px;
+}
+
+.chat-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #2a2a2a;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat-header h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888;
+}
+
+.chat-input-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid #2a2a2a;
+    flex-shrink: 0;
+}
+
+#chatInput {
+    flex: 1;
+    padding: 9px 12px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 0.88rem;
+    outline: none;
+}
+
+#chatInput::placeholder {
+    color: #555;
+}
+
+#sendBtn,
+#shareBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ff0000;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.msg-time {
+    white-space: nowrap;
+}
+
+#joinOverlay h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+#joinOverlay p {
+    color: #888;
+    margin-top: 4px;
+}
+
+#startBtn:hover {
+    background: #ff2020;
+    transform: translateY(-2px);
+    transition: all 0.2s;
+}
+
+@media(max-width:700px) {
+    .main-area {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .video-section {
+        width: 100%;
+
+        aspect-ratio: 16/9;
+    }
+
+    .chat-section {
+        width: 100%;
+        flex: 1;
+    }
+
+    .room-header {
+        height: auto;
+        gap: 6px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        display: flex;
+    }
+
+    .header-left {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .header-right {
+        width: 100%;
+
+    }
+}
+
+#videoUrlInput {
+    padding: 7px 12px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+#loadVideoBtn {
+    padding: 7px 14px;
+    background: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+
+}
+
+#RoomId {
+    margin: 10px;
+    padding: 8px;
+}

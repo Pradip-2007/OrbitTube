@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrbitTube - Room</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+    <link rel="stylesheet" href="/css/room.css">
+</head>
+
+<body>
+    <div id="joinOverlay"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:sans-serif;">
+        <h2>Ready to Watch?</h2>
+        <p>Click below to unlock video sync.</p>
+        <button id="startBtn"
+            style="padding: 15px 30px; font-size: 18px; cursor: pointer; background:#ff0000; color:white; border:none; border-radius:5px; margin-top:20px;">Join
+            Room</button>
+    </div>
+    <div class="room-container">
+        <header class="room-header">
+            <div class="header-left">
+                <a href="/" class="logo">
+                    <img src="/assets/logo.svg" alt="logo" height="42" style="border-radius: 50%;">
+                    OrbitTube
+                </a>
+                <div id="RoomId">
+                    Room id:
+                    <span class="room-badge" id="roomBadge"></span>
+                </div>
+            </div>
+            <div class="header-right">
+                <span id="participantCount" class="participant-count">0 online</span>
+                <div class="video-input-group">
+                    <input type="text" id="videoUrlInput" placeholder="Paste YouTube URL ">
+                    <button id="loadVideoBtn" class="btn small">Load</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-area">
+            <div class="video-section">
+                <div id="player"></div>
+            </div>
+
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h3>Chat</h3>
+                    <button id="shareBtn" class="shareBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type a message..." maxlength="500">
+                    <button id="sendBtn" class="btn send-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <script src="/rooms.js"></script>
+</body>
+
+</html>
