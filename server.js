@@ -9,13 +9,29 @@ const { Server } = require('socket.io');
 const io = new Server(server);
 const rooms = {};
 const roomUsers = {};
+const youtubesearchapi = require('youtube-search-api');
 
+app.get('/search', async (req, res) => {
+    const query = req.query.q;
+    if (!query) return res.status(400).json({ error: 'No query provided' });
+    try {
+        const results = await youtubesearchapi.GetListByKeyword(query, false, 8, [{ type: 'video' }]);
+        const videos = results.items.map(v => ({
+            id: v.id,
+            title: v.title,
+            thumbnail: v.thumbnail?.thumbnails?.at(-1)?.url ?? '',
+            duration: v.length?.simpleText ?? ''
+        }));
+        res.json(videos);
+    } catch (err) {
+        res.status(500).json({ error: 'Search failed' });
+    }
+});
 app.use(Express.static('public'));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
-})
-
+});
 app.get('/create-room', (req, res) => {
     const roomId = randomUUID().slice(0, 8)
     rooms[roomId] = {

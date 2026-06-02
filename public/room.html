@@ -33,13 +33,21 @@
             </div>
             <div class="header-right">
                 <span id="participantCount" class="participant-count">0 online</span>
-                <div class="video-input-group">
-                    <input type="text" id="videoUrlInput" placeholder="Paste YouTube URL ">
-                    <button id="loadVideoBtn" class="btn small">Load</button>
-                </div>
             </div>
         </header>
-
+        <div class="controls-bar">
+            <div class="search">
+                <input id="searchInput" type="text" placeholder="Search or paste youtube url " />
+                <button id="searchBtn" aria-label="search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <div id="searchResults"></div>
+            </div>
+        </div>
         <div class="main-area">
             <div class="video-section">
                 <div id="player"></div>

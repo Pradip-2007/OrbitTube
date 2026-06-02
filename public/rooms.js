@@ -4,8 +4,6 @@ let player;
 let networkactiontimer = null;
 const roomId = window.location.pathname.split('/')[2];
 const socket = io({ transports: ['websocket', 'polling'] });
-const videoUrlInput = document.getElementById('videoUrlInput');
-const loadVideoBtn = document.getElementById('loadVideoBtn');
 const messageinput = document.getElementById('chatInput');
 const messagesend = document.getElementById('sendBtn');
 const chat_window = document.getElementById('chatMessages');
@@ -13,7 +11,9 @@ const startBtn = document.getElementById('startBtn');
 const joinOverlay = document.getElementById('joinOverlay');
 const username = localStorage.getItem('username');
 const shareBtn = document.getElementById('shareBtn');
-
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const searchResults = document.getElementById('searchResults');
 if (!username) {
     localStorage.setItem('pendingroom', roomId);
     window.location.href = '/';
@@ -135,7 +135,11 @@ function applyRoomState(state) {
     if (state.isplaying && state.last_played_at) {
         elapsed = (Date.now() - state.last_played_at) / 1000;
     }
-    const target_timestamp = state.timestamp + elapsed;
+    let target_timestamp = state.timestamp + elapsed;
+    const duration = player.getDuration();
+    if (duration && duration > 0) {
+        target_timestamp = Math.min(target_timestamp, duration - 1);
+    }
     let currenturl = '';
     try { currenturl = player.getVideoUrl(); }
     catch (e) { }
@@ -201,17 +205,6 @@ startBtn.addEventListener('click', () => {
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(iframeapi_tag, firstScriptTag);
 })
-loadVideoBtn.addEventListener('click', () => {
-    const url = videoUrlInput.value.trim();
-    if (url) {
-        socket.emit('load-video', url);
-        videoUrlInput.value = '';
-    }
-})
-
-videoUrlInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') loadVideoBtn.click();
-})
 
 messagesend.addEventListener('click', () => {
     const text = messageinput.value.trim();
@@ -223,3 +216,49 @@ messagesend.addEventListener('click', () => {
 messageinput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') messagesend.click();
 })
+searchBtn.addEventListener('click', async () => {
+    const query = searchInput.value.trim();
+    if (!query) return;
+    const possibleId = extractVideoId(query);
+    if (possibleId !== query) {
+        socket.emit('load-video', query);
+        searchInput.value = '';
+        searchResults.style.display = none;
+        return;
+    }
+    searchResults.innerHTML = '<div style="padding:8px;color:#aaa">Searching...</div>';
+    searchResults.style.display = 'block';
+
+    const res = await fetch(`/search?q=${encodeURIComponent(query)}`);
+    const videos = await res.json();
+
+    searchResults.innerHTML = '';
+    videos.forEach(v => {
+        const item = document.createElement('div');
+        item.className = 'search-result-item';
+        item.innerHTML = `
+            <img src="${v.thumbnail}" width="80" style="border-radius:4px;flex-shrink:0">
+            <div style="overflow:hidden">
+                <div style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v.title}</div>
+                <div style="font-size:11px;color:#aaa">${v.duration}</div>
+            </div>
+        `;
+        item.style.cssText = 'display:flex;gap:10px;padding:8px;cursor:pointer;align-items:center;border-bottom:1px solid #333';
+        item.addEventListener('click', () => {
+            socket.emit('load-video', `https://www.youtube.com/watch?v=${v.id}`);
+            searchResults.style.display = 'none';
+            searchInput.value = '';
+        });
+        searchResults.appendChild(item);
+    });
+});
+
+searchInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') searchBtn.click();
+});
+
+document.addEventListener('click', e => {
+    if (!searchResults.contains(e.target) && e.target !== searchInput && e.target !== searchBtn) {
+        searchResults.style.display = 'none';
+    }
+});

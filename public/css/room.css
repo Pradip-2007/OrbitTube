@@ -11,6 +11,76 @@ body {
     min-height: 100vh;
 }
 
+.controls-bar {
+    display: flex;
+    gap: 12px;
+    padding: 8px 16px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.search {
+    position: relative;
+    flex: 1;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+#searchInput {
+    padding: 7px 12px;
+    height: 40px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    appearance: none;
+}
+
+#searchBtn {
+    padding: 7px 9px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #aaa;
+}
+
+#searchBtn svg {
+    width: 25px;
+    height: 25px;
+}
+
+
+#searchBtn:hover {
+    background: #444;
+}
+
+#searchResults {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 6px;
+    width: 340px;
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
 .room-container {
     display: flex;
     flex-direction: column;
@@ -243,6 +313,16 @@ body {
         aspect-ratio: 16/9;
     }
 
+    .controls-bar {
+        gap: 8px;
+        padding: 8px;
+        justify-content: space-between;
+    }
+
+    #searchInput {
+        width: 100%;
+    }
+
     .chat-section {
         width: 100%;
         flex: 1;
@@ -265,28 +345,6 @@ body {
         width: 100%;
 
     }
-}
-
-#videoUrlInput {
-    padding: 7px 12px;
-    background: #2a2a2a;
-    border: 1px solid #3a3a3a;
-    border-radius: 6px;
-    color: #fff;
-    font-size: 0.85rem;
-    outline: none;
-}
-
-#loadVideoBtn {
-    padding: 7px 14px;
-    background: #ff0000;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-
 }
 
 #RoomId {
