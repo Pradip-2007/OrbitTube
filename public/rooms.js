@@ -131,14 +131,10 @@ function applyRoomState(state) {
     if (!state || !state.url) return;
     locknetwork(1200);
     const videoId = extractVideoId(state.url);
-    let elapsed = 0;
-    if (state.isplaying && state.last_played_at) {
-        elapsed = (Date.now() - state.last_played_at) / 1000;
-    }
-    let target_timestamp = state.timestamp + elapsed;
+    let target_timestamp = Math.max(0, state.timestamp);
     const duration = player.getDuration();
     if (duration && duration > 0) {
-        target_timestamp = Math.min(target_timestamp, duration - 1);
+        target_timestamp = Math.min(target_timestamp, duration - 2);
     }
     let currenturl = '';
     try { currenturl = player.getVideoUrl(); }

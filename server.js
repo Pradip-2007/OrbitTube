@@ -82,9 +82,17 @@ io.on('connection', (socket) => {
         }
         currentroom = roomid;
         socket.join(roomid);
+        let effectiveTimestamp = room.timestamp;
+        if (room.isplaying && room.last_played_at) {
+            effectiveTimestamp += (Date.now() - room.last_played_at) / 1000;
+        }
         room.participants.push({ id: socket.id, username: username });
         io.to(currentroom).emit('user-count', room.participants.length);
-        socket.emit('room-state', rooms[currentroom]);
+        socket.emit('room-state', {
+            ...rooms[currentroom],
+            timestamp: effectiveTimestamp,
+            last_played_at: null
+        });
     })
 
     socket.on('load-video', (videourl) => {
