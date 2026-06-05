@@ -10,6 +10,8 @@ const chat_window = document.getElementById('chatMessages');
 const startBtn = document.getElementById('startBtn');
 const joinOverlay = document.getElementById('joinOverlay');
 const username = localStorage.getItem('username');
+const password = localStorage.getItem('password');
+localStorage.removeItem('password');
 const shareBtn = document.getElementById('shareBtn');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
@@ -24,7 +26,7 @@ if (roomId) {
 }
 
 socket.on('connect', () => {
-    socket.emit('joinroom', { roomid: roomId, username });
+    socket.emit('joinroom', { roomid: roomId, username, password });
 })
 socket.on('error', (msg) => {
     alert(msg);
@@ -163,6 +165,7 @@ function applyRoomState(state) {
     }
 
 }
+
 function onPlayerStateChange(event) {
     if (event.data === 1 || event.data === 2) {
         if (isSyncing) {
@@ -219,7 +222,7 @@ searchBtn.addEventListener('click', async () => {
     if (possibleId !== query) {
         socket.emit('load-video', query);
         searchInput.value = '';
-        searchResults.style.display = none;
+        searchResults.style.display = 'none';
         return;
     }
     searchResults.innerHTML = '<div style="padding:8px;color:#aaa">Searching...</div>';

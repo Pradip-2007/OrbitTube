@@ -8,7 +8,6 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 const rooms = {};
-const roomUsers = {};
 const youtubesearchapi = require('youtube-search-api');
 
 app.get('/search', async (req, res) => {
@@ -33,13 +32,15 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 app.get('/create-room', (req, res) => {
-    const roomId = randomUUID().slice(0, 8)
+    const roomId = randomUUID().slice(0, 8);
+    const password = req.query.password?.trim() || null;
     rooms[roomId] = {
         participants: [],
         url: null,
         timestamp: 0,
         isplaying: false,
-        last_played_at: null
+        last_played_at: null,
+        password: password
     }
     res.redirect(`/room/${roomId}`);
 })
@@ -70,7 +71,7 @@ io.on('connection', (socket) => {
         io.to(currentroom).emit('chat', chatobj);
     })
 
-    socket.on('joinroom', ({ roomid, username }) => {
+    socket.on('joinroom', ({ roomid, username, password }) => {
         if (!username || username.trim() === '') {
             socket.emit('error', 'Username is required');
             return;
@@ -78,6 +79,12 @@ io.on('connection', (socket) => {
         const room = rooms[roomid];
         if (!room) {
             socket.emit('error', 'Room not found');
+            return;
+        }
+        if (room.password && room.password !== password?.trim()) {
+            console.log(password);
+            console.log(room.password);
+            socket.emit('error', 'Wrong password');
             return;
         }
         currentroom = roomid;
@@ -88,8 +95,9 @@ io.on('connection', (socket) => {
         }
         room.participants.push({ id: socket.id, username: username });
         io.to(currentroom).emit('user-count', room.participants.length);
+        const { password: _password, ...saferoomstate } = rooms[currentroom];
         socket.emit('room-state', {
-            ...rooms[currentroom],
+            ...saferoomstate,
             timestamp: effectiveTimestamp,
             last_played_at: null
         });

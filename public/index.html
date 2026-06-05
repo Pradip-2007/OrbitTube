@@ -17,6 +17,8 @@
         <p class="tagline">Watch YouTube videos in sync with friends</p>
         <input type="text" id="hostUsernameInput" placeholder="Your name" maxlength="20" required
             style="width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff;">
+        <input type="text" id="hostpasswordinput" placeholder="Room password" maxlength="10"
+            style="width: 100%;margin-bottom: 10px ;padding:  10px;border-radius: 8px;border: 1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color : #fff">
         <button class="create-btn" onclick="createRoom()">
             Create New Room
         </button>
@@ -28,7 +30,7 @@
         <form id="joinForm">
             <input type="text" id="roomId" placeholder="Enter Room ID" required />
             <input type="text" id="usernameInput" placeholder="Your name" maxlength="20" required>
-
+            <input type="text" id="joinpasswordinput" placeholder="Room password " maxlength="10">
             <button type="submit" class="join-btn">
                 Join Room
             </button>
@@ -43,20 +45,24 @@
                 alert("Please enter Your name ");
                 return;
             }
+            const password = document.getElementById('hostpasswordinput').value.trim();
             localStorage.setItem("username", username);
-            window.location.href = '/create-room'
+            localStorage.setItem("password", password);
+            window.location.href = password ? `/create-room?password=${encodeURIComponent(password)}` : '/create-room';
         }
         document.getElementById('joinForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const username = usernameInput.value.trim();
-            const roomid = document.getElementById('roomId').value.trim()
+            const roomid = document.getElementById('roomId').value.trim();
+            const password = document.getElementById('joinpasswordinput')?.value.trim() ?? '';
             if (!username || !roomid) {
                 alert("Please enter roomid and your name");
+                return;
             }
             localStorage.setItem("username", username);
-            if (roomid) {
-                window.location.href = `/room/${roomid}`
-            }
+            if (password) localStorage.setItem('password', password);
+            window.location.href = `/room/${roomid}`
+
         })
         const pending_room = localStorage.getItem("pendingroom");
         if (pending_room) {
